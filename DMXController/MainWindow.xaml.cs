@@ -63,7 +63,7 @@ namespace DMXController
                     acceptval = false;
                 }
             }
-            catch (Exception ex) { }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
 
 
