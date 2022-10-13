@@ -1,0 +1,21 @@
+﻿<Window x:Class="DMXController.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DMXController"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="1080" Width="1920" Closing="windowClosing">
+        
+    <Canvas
+        Background="#161616">
+        <Label Content="Shitty DMX panel" Height="106" Width="597" Foreground="White" FontFamily="Segoe UI" FontSize="32" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <StackPanel Height="576" Width="486" HorizontalAlignment="Center" Canvas.Top="82" VerticalAlignment="Top" Background="#323032"/>
+        <Slider Width="120" Canvas.Left="728" Canvas.Top="239" ValueChanged="colvalchang" Maximum="255"/>
+        <Slider Width="120" Canvas.Left="728" Canvas.Top="271" HorizontalAlignment="Center" VerticalAlignment="Top" ValueChanged="mainvalchang" Maximum="255"/>
+
+    </Canvas>
+
+
+
+</Window>
