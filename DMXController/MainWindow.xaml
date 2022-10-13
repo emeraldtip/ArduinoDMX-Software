@@ -3,17 +3,80 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:colorpicker="clr-namespace:ColorPicker;assembly=ColorPicker"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:DMXController"
         mc:Ignorable="d"
         Title="MainWindow" Height="1080" Width="1920" Closing="windowClosing">
-        
-    <Canvas
+
+    <Canvas x:Name="Allchan"
         Background="#161616">
         <Label Content="Shitty DMX panel" Height="106" Width="597" Foreground="White" FontFamily="Segoe UI" FontSize="32" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-        <StackPanel Height="576" Width="486" HorizontalAlignment="Center" Canvas.Top="82" VerticalAlignment="Top" Background="#323032"/>
-        <Slider Width="120" Canvas.Left="728" Canvas.Top="239" ValueChanged="colvalchang" Maximum="255"/>
-        <Slider Width="120" Canvas.Left="728" Canvas.Top="271" HorizontalAlignment="Center" VerticalAlignment="Top" ValueChanged="mainvalchang" Maximum="255"/>
-
+        <StackPanel x:Name="FixturePan" Height="576" Width="486" HorizontalAlignment="Center" Canvas.Top="82" VerticalAlignment="Top" Background="#323032"/>
+        <ScrollViewer CanContentScroll ="True" SnapsToDevicePixels ="True" Canvas.Top="724" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden" Name ="scroll" Height="320" Width="1920" >
+            <StackPanel x:Name="AllChanPan" Height="320" Width="1920" Canvas.Top="724" Background="#323032" Orientation="Horizontal"/>
+        </ScrollViewer>
+        <Button Content="Blackout" Canvas.Left="1748" Height="53" Width="172" FontSize="36" Click="Button_Click"/>
+        <Canvas Height="430" Width="833" Canvas.Left="926" Canvas.Top="204" Background="#323032">
+            <colorpicker:StandardColorPicker x:Name="main" Width="200" Height="380" ColorChanged="main_ColorChanged"/>
+            <Slider Canvas.Left="263" Canvas.Top="54" Width="120" Orientation="Vertical" Height="136" Name ="dimmer" ValueChanged="dimmer_ValueChanged" Maximum="255" LargeChange="15"/>
+            <Slider Canvas.Left="296" Canvas.Top="54" Width="120" Orientation="Vertical" Height="136" Name ="white" ValueChanged="white_ValueChanged" Maximum="255" LargeChange="15"/>
+            <Slider Canvas.Left="323" Canvas.Top="54" Width="120" Orientation="Vertical" Height="136" Name ="amber" ValueChanged="amber_ValueChanged" Maximum="255" LargeChange="15"/>
+            <Slider Canvas.Left="356" Canvas.Top="54" Width="120" Orientation="Vertical" Height="136" Name ="uv" ValueChanged="uv_ValueChanged" Maximum="255" LargeChange="15"/>
+            <Slider Canvas.Left="382" Canvas.Top="54" Width="120" Orientation="Vertical" Height="136" Name ="strobe" ValueChanged="strobe_ValueChanged" Maximum="255" LargeChange="15"/>
+            
+            <Label Content="Dimmer" Canvas.Left="228" Canvas.Top="213" RenderTransformOrigin="0.5,0.5" Foreground="White" FontSize="20">
+                <Label.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="-90"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Label.RenderTransform>
+            </Label>
+            <Label Content="White" Canvas.Left="271" Canvas.Top="205" RenderTransformOrigin="0.5,0.5" Foreground="White" FontSize="20">
+                <Label.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="-90"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Label.RenderTransform>
+            </Label>
+            <Label Content="Amber" Canvas.Left="295" Canvas.Top="208" RenderTransformOrigin="0.5,0.5" Foreground="White" FontSize="20">
+                <Label.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="-90"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Label.RenderTransform>
+            </Label>
+            <Label Content="UV" Canvas.Left="350" Canvas.Top="190" RenderTransformOrigin="0.5,0.5" Foreground="White" FontSize="20">
+                <Label.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="-90"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Label.RenderTransform>
+            </Label>
+            <Label Content="Strobe
+                   " Canvas.Left="299" Canvas.Top="152" RenderTransformOrigin="0.5,0.5" Foreground="White" FontSize="20">
+                <Label.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="-90"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Label.RenderTransform>
+            </Label>
+        </Canvas>
     </Canvas>
 
 
