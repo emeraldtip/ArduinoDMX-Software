@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "dgSpecHash": "W+coaT8u5Oh+4tKs/0Kx7roQvzsMVC68B+eN7RWFUmjZ12hVsiS2/TH2Pe8qnS79NlvfhkT06dbHsVB3EA0wAQ==",
+  "success": true,
+  "projectFilePath": "D:\\Users\\sgjes\\Documents\\Visual studioo\\ArduinoDMX-Software\\DMXController\\DMXController.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\sgjes\\.nuget\\packages\\extended.wpf.toolkit\\4.4.0\\extended.wpf.toolkit.4.4.0.nupkg.sha512",
+    "C:\\Users\\sgjes\\.nuget\\packages\\microsoft.xaml.behaviors.wpf\\1.1.31\\microsoft.xaml.behaviors.wpf.1.1.31.nupkg.sha512",
+    "C:\\Users\\sgjes\\.nuget\\packages\\pixieditor.colorpicker\\3.3.1\\pixieditor.colorpicker.3.3.1.nupkg.sha512",
+    "C:\\Users\\sgjes\\.nuget\\packages\\runtime.linux-arm.runtime.native.system.io.ports\\6.0.0\\runtime.linux-arm.runtime.native.system.io.ports.6.0.0.nupkg.sha512",
+    "C:\\Users\\sgjes\\.nuget\\packages\\runtime.linux-arm64.runtime.native.system.io.ports\\6.0.0\\runtime.linux-arm64.runtime.native.system.io.ports.6.0.0.nupkg.sha512",
+    "C:\\Users\\sgjes\\.nuget\\packages\\runtime.linux-x64.runtime.native.system.io.ports\\6.0.0\\runtime.linux-x64.runtime.native.system.io.ports.6.0.0.nupkg.sha512",
+    "C:\\Users\\sgjes\\.nuget\\packages\\runtime.native.system.io.ports\\6.0.0\\runtime.native.system.io.ports.6.0.0.nupkg.sha512",
+    "C:\\Users\\sgjes\\.nuget\\packages\\runtime.osx-arm64.runtime.native.system.io.ports\\6.0.0\\runtime.osx-arm64.runtime.native.system.io.ports.6.0.0.nupkg.sha512",
+    "C:\\Users\\sgjes\\.nuget\\packages\\runtime.osx-x64.runtime.native.system.io.ports\\6.0.0\\runtime.osx-x64.runtime.native.system.io.ports.6.0.0.nupkg.sha512",
+    "C:\\Users\\sgjes\\.nuget\\packages\\system.io.ports\\6.0.0\\system.io.ports.6.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
