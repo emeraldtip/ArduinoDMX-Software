@@ -178,7 +178,7 @@ namespace DMXController
                 animPanel.Children.Add(panel);
             }
             port.PortName = "COM12"; // currently hardcoded, make way to change this
-            port.BaudRate = 115200;
+            port.BaudRate = 2000000;
         
             dispatcherTimerr.Tick += new EventHandler(finalSender);
             dispatcherTimerr.Interval = TimeSpan.FromMilliseconds(50);

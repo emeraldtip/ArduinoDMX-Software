@@ -97,3 +97,4 @@ C:\Users\karlj\source\repos\DMXController\DMXController\obj\Debug\net6.0-windows
 C:\Users\karlj\source\repos\DMXController\DMXController\obj\Debug\net6.0-windows\DMXController.genruntimeconfig.cache
 C:\Users\karlj\source\repos\DMXController\DMXController\obj\Debug\net6.0-windows\ref\DMXController.dll
 C:\Users\karlj\source\repos\DMXController\DMXController\obj\Debug\net6.0-windows\DMXController_Content.g.cs
+D:\Users\sgjes\Documents\Visual studioo\ArduinoDMX-Software\DMXController\obj\Debug\net6.0-windows\DMXController_Content.g.cs
