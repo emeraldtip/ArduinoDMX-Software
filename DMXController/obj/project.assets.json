@@ -395,25 +395,28 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\sgjes\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\karlj\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
+    "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Users\\sgjes\\Documents\\Visual studioo\\ArduinoDMX-Software\\DMXController\\DMXController.csproj",
+      "projectUniqueName": "C:\\Users\\karlj\\source\\repos\\DMXController\\DMXController\\DMXController.csproj",
       "projectName": "DMXController",
-      "projectPath": "D:\\Users\\sgjes\\Documents\\Visual studioo\\ArduinoDMX-Software\\DMXController\\DMXController.csproj",
-      "packagesPath": "C:\\Users\\sgjes\\.nuget\\packages\\",
-      "outputPath": "D:\\Users\\sgjes\\Documents\\Visual studioo\\ArduinoDMX-Software\\DMXController\\obj\\",
+      "projectPath": "C:\\Users\\karlj\\source\\repos\\DMXController\\DMXController\\DMXController.csproj",
+      "packagesPath": "C:\\Users\\karlj\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\karlj\\source\\repos\\DMXController\\DMXController\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+        "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
       ],
       "configFilePaths": [
-        "C:\\Users\\sgjes\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\karlj\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net6.0-windows7.0"
@@ -469,7 +472,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.109\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
       }
     }
   }

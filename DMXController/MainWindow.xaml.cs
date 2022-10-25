@@ -31,17 +31,26 @@ namespace DMXController
     ///Has a dict that has following elements
     ///key-value pairs - key value to be changed (red,green,blue,white,amber,uv,dimmer,strobe,footprint) and value - channel/property name
 
+    ///Animations aka effects
+    ///dict: key - animation name; value - dict: key - millisecond; value - dict: key - channel; value - value
     public partial class MainWindow : Window
     {
         private Dictionary<string, Dictionary<string, int>> fixtures = new Dictionary<string, Dictionary<string, int>>();
         private Dictionary<int, string> activeFixtures = new Dictionary<int, string>(); //first channel which it runs off of, second is name of ahrdware
         private List<int> changingFixtures = new List<int>();
 
+        //it's a dictionary inside of a dictionary inside of a dictionary inside of a dictionary
+        //I don't see a single problem here
+        private Dictionary<string,Dictionary<int,Dictionary<int,int>>> animations = new Dictionary<string, Dictionary<int, Dictionary<int, int>>>(); 
+
         private Dictionary<int, int> dataToAdd = new Dictionary<int, int>();
+        private List<int> channelOrder = new List<int>(); //to add newest change in the channels first and make sure it get's through
+
         public DispatcherTimer dispatcherTimerr = new DispatcherTimer();
         private static SerialPort port = new SerialPort();
         private Boolean acceptval = true;
-        private int startChannel = 1;
+        private int startChannel = 1; //this will be used later
+        private bool animRunning = false;
 
 
 
@@ -75,7 +84,34 @@ namespace DMXController
                 File.WriteAllText("fixtures.json", towrite);
             }
 
-            //currently hardcoded, make way to change
+            if (File.Exists("animations.json"))
+            {
+                try
+                {
+                    //first frame - millisecond 0 has the length of the animation (aka last millisecond) as the value of channel 0, then the next millisecond is the thing is the frame where the animation actually starts
+                    animations = JsonSerializer.Deserialize<Dictionary<string, Dictionary<int, Dictionary<int, int>>>>(File.ReadAllText("animations.json"));
+                }
+                catch (Exception ex) { MessageBox.Show(ex.Message); }
+            }
+            else
+            {
+                Dictionary<int,int> test = new Dictionary<int,int>();
+                test[0] = 100;
+                test[2] = 100;
+
+                Dictionary<int, Dictionary<int, int>> tes2 = new Dictionary<int, Dictionary<int, int>>();
+                tes2[0] = test;
+
+                animations["Police"] = tes2;
+
+                string towrite = JsonSerializer.Serialize(animations);
+                File.WriteAllText("animations.json", towrite);
+
+                //{"Police":{1:{3:2000},1000:{1:255,3:0,8:255,10:0,15:0,17:255,22:0,24:255},2000:{1:0,3:255,8:0,10:255,15:255,17:0,22:255,24:0}}}
+
+            }
+
+            //currently hardcoded, make way  to change
             activeFixtures[1] = "12PX Hex Pearl";
             activeFixtures[8] = "12PX Hex Pearl";
             activeFixtures[15] = "12PX Hex Pearl";
@@ -113,7 +149,35 @@ namespace DMXController
 
             }
 
-            port.PortName = "COM6"; // currently hardcoded, make way to change this
+            foreach(String animation in animations.Keys)
+            {
+                StackPanel animPanel = (StackPanel)this.FindName("AnimPan");
+                StackPanel panel = new StackPanel();
+                panel.Orientation = Orientation.Horizontal;
+
+                Label label = new Label();
+                label.Content = animation;
+                label.Foreground = Brushes.White;
+
+                Button enable = new Button();
+                enable.Margin = new Thickness(20,0,0,0);
+                enable.Tag = animation;
+                enable.Content = "Start animation";
+                enable.Click += animer;
+
+                Button disable = new Button();
+                disable.Tag = animation;
+                disable.Content = "Stop animation";
+                disable.Margin = new Thickness(20, 0, 0, 0);
+                disable.IsEnabled = false;
+                disable.Click += animer;
+
+                panel.Children.Add(label);
+                panel.Children.Add(enable);
+                panel.Children.Add(disable);
+                animPanel.Children.Add(panel);
+            }
+            port.PortName = "COM12"; // currently hardcoded, make way to change this
             port.BaudRate = 115200;
         
             dispatcherTimerr.Tick += new EventHandler(finalSender);
@@ -122,10 +186,15 @@ namespace DMXController
             dispatcherTimerr.Tick += new EventHandler(datapart1Sender);
             dispatcherTimerr.Interval = TimeSpan.FromMilliseconds(10);
             dispatcherTimerr.Start();
-            port.Open();
+            try
+            {
+                port.Open();
+            }
+            catch (Exception ex) { }
+            
             allChanPan = (StackPanel)this.FindName("AllChanPan");
 
-            for (int i = 0; i < 255; i++)
+            for (int i = 0; i < 512; i++)
             {
                 Canvas temppan = new Canvas();
                 temppan.Width = 25;
@@ -138,10 +207,11 @@ namespace DMXController
 
                 Slider slider = new Slider();
                 slider.Orientation = Orientation.Vertical;
-                slider.Margin = new Thickness(0, 20, 0, 0);
+                slider.Margin = new Thickness(0, 50, 0, 0);
                 slider.Height = 250;
                 slider.Minimum = 0;
                 slider.SmallChange = 15;
+                slider.SmallChange = 1;
                 slider.Maximum = 255;
                 slider.Name = "S"+(i + 1).ToString();
                 slider.ValueChanged += new RoutedPropertyChangedEventHandler<double>(channelSliderChanged);
@@ -152,6 +222,38 @@ namespace DMXController
 
             }
         }
+        private void animer(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            button.IsEnabled = false;
+            if (button.Content == "Start animation")
+            {
+                ((Button)((StackPanel)button.Parent).Children[2]).IsEnabled = true;
+
+            }
+            else
+            {
+                ((Button)((StackPanel)button.Parent).Children[1]).IsEnabled = true;
+            }
+        }
+
+        private void animstart(string animation)
+        {
+            int length = animations[animation][0][0];
+            for (int i = 0; i < length; i++)
+            {
+                var frame = animations[animation][i+1];
+                foreach (var chanel in frame.Keys)
+                {
+                    dataToAdd[chanel] = frame[chanel];
+                    if (channelOrder.Contains(chanel))
+                    {
+                        channelOrder.Remove(chanel);
+                    }
+                    channelOrder.Insert(0, chanel);
+                }
+            }
+        }
 
         private void changeValue(string name, int value)
         {
@@ -160,7 +262,13 @@ namespace DMXController
                 var fixture = fixtures[activeFixtures[id]];
                 if (fixture.Keys.Contains(name))
                 {
-                    dataToAdd[id - 1 + fixtures[activeFixtures[id]][name]] = value; //hesus, do you love me?
+                    int fixtureID = id - 1 + fixtures[activeFixtures[id]][name];
+                    dataToAdd[fixtureID] = value; //hesus, do you love me?
+                    if (channelOrder.Contains(fixtureID))
+                    {
+                        channelOrder.Remove(fixtureID);
+                    }
+                    channelOrder.Insert(0, fixtureID);
                 }
             }
         }
@@ -185,13 +293,17 @@ namespace DMXController
             {
                 //let's hope this works
                 dataToAdd[int.Parse(slider.Name.Substring(1))] = (int)((Slider)sender).Value;
+                if (channelOrder.Contains(int.Parse(slider.Name.Substring(1))))
+                {
+                    channelOrder.Remove(int.Parse(slider.Name.Substring(1)));
+                }
+                channelOrder.Insert(0,int.Parse(slider.Name.Substring(1)));
             }
         }
 
         private void finalSender(object? sender,EventArgs e)
         {
             port.Close();
-            acceptval = true;
         }
         private void datapart1Sender(object? sender, EventArgs e)
         {
@@ -209,27 +321,40 @@ namespace DMXController
         //ehh that didn't fix it - TODO - some day maek this run without utilizing like half the cpu-
         private void datapart2Sender()
         {
-            foreach (KeyValuePair<int, int> a in dataToAdd)
+            try
             {
-                Task.Run(() => dataSender(a.Key.ToString(), a.Value.ToString()));
+                foreach (int a in channelOrder)
+                {
+                    if (dataSender(a.ToString(), dataToAdd[a].ToString()) == true)
+                    {
+                        continue;
+                    }
+                }
             }
+            catch { }
         }
-        private async Task dataSender(string key,string value)
+        private Boolean dataSender(string key,string value)
         {
             if (acceptval == true)
             {
                 if (!port.IsOpen)
                 {
-                    port.Open();
+                    try
+                    {
+                        port.Open();
+                    } catch { }
+                    
                 }
                 try
                 {                
                     port.WriteLine("[" + key + ":" + value + "]");
-                    Thread.Sleep(10);
+                    acceptval = true;
                 }
                 catch (Exception ex) {}
-                acceptval = false;
+                
+                return false;
             }
+            return false;
         }
         
 
@@ -283,6 +408,16 @@ namespace DMXController
         {
             Slider slider = (Slider)sender;
             changeValue("strobe", (int)slider.Value);
+        }
+
+        private void Blackout(object sender, RoutedEventArgs e)
+        {
+            dataToAdd.Clear();
+            for (int i = 0; i < 512; i++)
+            { 
+                dataSender(i.ToString(), "0");
+                Thread.Sleep(1);
+            }
         }
     }
 }
