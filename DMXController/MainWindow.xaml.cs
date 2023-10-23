@@ -43,15 +43,15 @@ namespace DMXController
         //I don't see a single problem here
         private Dictionary<string,Dictionary<int,Dictionary<int,int>>> animations = new Dictionary<string, Dictionary<int, Dictionary<int, int>>>(); 
 
-        private Dictionary<int, int> dataToAdd = new Dictionary<int, int>();
-        private List<int> channelOrder = new List<int>(); //to add newest change in the channels first and make sure it get's through
+        private byte[] data = new byte[512]; 
+        //private List<int> channelOrder = new List<int>(); //to add newest change in the channels first and make sure it get's through - nuh-uh, we using bytes now
 
         public DispatcherTimer dispatcherTimerr = new DispatcherTimer();
         private static SerialPort port = new SerialPort();
-        private Boolean acceptval = true;
         private int startChannel = 1; //this will be used later
         private bool animRunning = false;
 
+        private bool blackout = false;
 
 
         private StackPanel allChanPan = new StackPanel();
@@ -177,20 +177,19 @@ namespace DMXController
                 panel.Children.Add(disable);
                 animPanel.Children.Add(panel);
             }
-            port.PortName = "COM12"; // currently hardcoded, make way to change this
-            port.BaudRate = 2000000;
-        
-            dispatcherTimerr.Tick += new EventHandler(finalSender);
-            dispatcherTimerr.Interval = TimeSpan.FromMilliseconds(50);
+            port.PortName = "COM4"; // currently hardcoded, make way to change this
+            port.BaudRate = 500000;
+            
+            
+            dispatcherTimerr.Tick += new EventHandler(dataSender);
+            dispatcherTimerr.Interval = TimeSpan.FromMilliseconds(30);
             dispatcherTimerr.Start();
+            /*
             dispatcherTimerr.Tick += new EventHandler(datapart1Sender);
             dispatcherTimerr.Interval = TimeSpan.FromMilliseconds(10);
             dispatcherTimerr.Start();
-            try
-            {
-                port.Open();
-            }
-            catch (Exception ex) { }
+            */
+            
             
             allChanPan = (StackPanel)this.FindName("AllChanPan");
 
@@ -245,12 +244,7 @@ namespace DMXController
                 var frame = animations[animation][i+1];
                 foreach (var chanel in frame.Keys)
                 {
-                    dataToAdd[chanel] = frame[chanel];
-                    if (channelOrder.Contains(chanel))
-                    {
-                        channelOrder.Remove(chanel);
-                    }
-                    channelOrder.Insert(0, chanel);
+                    data[chanel-1] = (byte)frame[chanel];
                 }
             }
         }
@@ -263,12 +257,7 @@ namespace DMXController
                 if (fixture.Keys.Contains(name))
                 {
                     int fixtureID = id - 1 + fixtures[activeFixtures[id]][name];
-                    dataToAdd[fixtureID] = value; //hesus, do you love me?
-                    if (channelOrder.Contains(fixtureID))
-                    {
-                        channelOrder.Remove(fixtureID);
-                    }
-                    channelOrder.Insert(0, fixtureID);
+                    data[fixtureID-1] = (byte)value; //hesus, do you love me?
                 }
             }
         }
@@ -292,15 +281,11 @@ namespace DMXController
             if (slider.Name.StartsWith ("S"))
             {
                 //let's hope this works
-                dataToAdd[int.Parse(slider.Name.Substring(1))] = (int)((Slider)sender).Value;
-                if (channelOrder.Contains(int.Parse(slider.Name.Substring(1))))
-                {
-                    channelOrder.Remove(int.Parse(slider.Name.Substring(1)));
-                }
-                channelOrder.Insert(0,int.Parse(slider.Name.Substring(1)));
+                data[int.Parse(slider.Name.Substring(1))-1] = (byte)((int)((Slider)sender).Value);
             }
         }
 
+        /*
         private void finalSender(object? sender,EventArgs e)
         {
             port.Close();
@@ -311,12 +296,12 @@ namespace DMXController
             Thread thread = new Thread(datapart2Sender);
             thread.Start();
             
-            /* Just a quick data ingegrity test idk
+             Just a quick data ingegrity test idk
             for (int i = 0; i < 255; i++)
             {
                 Task.Run(() => dataSender((i+1).ToString(), "2"));
             }
-            */
+            
         }
         //ehh that didn't fix it - TODO - some day maek this run without utilizing like half the cpu-
         private void datapart2Sender()
@@ -333,31 +318,67 @@ namespace DMXController
             }
             catch { }
         }
-        private Boolean dataSender(string key,string value)
+        */
+
+        private void dataSender(object? sender, EventArgs e)
         {
-            if (acceptval == true)
+            if (!port.IsOpen)
             {
-                if (!port.IsOpen)
+                try
+                {
+                    port.Open();
+                    port.DiscardOutBuffer();
+                    port.DiscardInBuffer();
+                    Thread.Sleep(100);
+                } 
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message + "\n Stacktrace: \n\n" + ex.StackTrace);
+                }
+            }
+            else
+            {
+                if (blackout == false)
                 {
                     try
                     {
-                        port.Open();
-                    } catch { }
-                    
+                        /* due to data loss we need a start byte sequence
+                         * 3 byte sequence - sum of all the rest of the bytes as a start of the sequence and convert those into bytes
+                         */
+                        
+                        byte[] finalData = new byte[512];
+
+                        int sum = 0;
+                        for (int i = 0; i < data.Length; i++)
+                        {
+                            //finalData[i + 3] = data[i]; //to account for start byte
+                            sum += data[i]; //to sum the byte values up
+                        }
+
+                        finalData[0] = (byte)(sum >> 16);
+                        finalData[1] = (byte)(sum >> 8);
+                        finalData[2] = (byte)sum;
+
+
+                        
+                        port.Write(finalData, 0, 515);
+
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message + "\n Stacktrace: \n\n" + ex.StackTrace);
+                    }
                 }
-                try
-                {                
-                    port.WriteLine("[" + key + ":" + value + "]");
-                    acceptval = true;
+                else
+                {
+                    port.Write(new byte[512], 0, 512);
                 }
-                catch (Exception ex) {}
-                
-                return false;
             }
-            return false;
         }
         
-
+                
 
         //these are for testing purposes right now
 
@@ -367,9 +388,13 @@ namespace DMXController
             port.Close();
         }
 
+        //clear all data
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            dataToAdd.Clear();
+            for (int i = 0; i < data.Length; i++)
+            {
+                data[i] = 0;
+            }
         }
 
         private void main_ColorChanged(object sender, RoutedEventArgs e)
@@ -412,11 +437,16 @@ namespace DMXController
 
         private void Blackout(object sender, RoutedEventArgs e)
         {
-            dataToAdd.Clear();
-            for (int i = 0; i < 512; i++)
-            { 
-                dataSender(i.ToString(), "0");
-                Thread.Sleep(1);
+            
+            if (blackout)
+            {
+                blackout = false;
+                ((Button)sender).Background = Brushes.Gray;
+            }
+            else
+            {
+                blackout = true;
+                ((Button)sender).Background = Brushes.Red;
             }
         }
     }
