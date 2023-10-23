@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Windows;
 using ColorPicker;
+using System.Diagnostics;
 
 namespace DMXController
 {
@@ -177,12 +178,12 @@ namespace DMXController
                 panel.Children.Add(disable);
                 animPanel.Children.Add(panel);
             }
-            port.PortName = "COM4"; // currently hardcoded, make way to change this
-            port.BaudRate = 500000;
+            port.PortName = "COM7"; // currently hardcoded, make way to change this
+            port.BaudRate = 115200;
             
             
             dispatcherTimerr.Tick += new EventHandler(dataSender);
-            dispatcherTimerr.Interval = TimeSpan.FromMilliseconds(30);
+            dispatcherTimerr.Interval = TimeSpan.FromMilliseconds(50);
             dispatcherTimerr.Start();
             /*
             dispatcherTimerr.Tick += new EventHandler(datapart1Sender);
@@ -342,26 +343,22 @@ namespace DMXController
                 {
                     try
                     {
-                        /* due to data loss we need a start byte sequence
-                         * 3 byte sequence - sum of all the rest of the bytes as a start of the sequence and convert those into bytes
-                         */
-                        
-                        byte[] finalData = new byte[512];
 
-                        int sum = 0;
+                        byte[] finalData = new byte[513];
                         for (int i = 0; i < data.Length; i++)
                         {
-                            //finalData[i + 3] = data[i]; //to account for start byte
-                            sum += data[i]; //to sum the byte values up
+                            if (data[i] == 90) //avoid collisions with stop byte
+                            {
+                                data[i] = 91; 
+                            }
+                            finalData[i] = data[i];
                         }
-
-                        finalData[0] = (byte)(sum >> 16);
-                        finalData[1] = (byte)(sum >> 8);
-                        finalData[2] = (byte)sum;
-
-
-                        
-                        port.Write(finalData, 0, 515);
+                        finalData[512] = 90;
+                        while (port.BytesToWrite > 0)
+                        {
+                            Debug.WriteLine("waiting");
+                        }
+                        port.Write(finalData, 0, 513); //BUT IT STILL DOESN'T FIX ANYTHING
 
 
 
