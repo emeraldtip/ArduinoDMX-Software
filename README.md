@@ -6,5 +6,5 @@ Data integrity is pretty bad (at least was for me)
 
 Also the code is written in like 1-2 nights and is absolute dogshit
 
-TODO:
-Add the arduino code
+I tried to fix data integrity using bytes instead of strings (whcih was pretty stupid)
+But data integrity still seems to be garbage and I can't figure out for the life of me how to get it working reliably
