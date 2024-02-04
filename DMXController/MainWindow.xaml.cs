@@ -22,6 +22,7 @@ using System.Data;
 using System.Windows;
 using ColorPicker;
 using System.Diagnostics;
+using Xceed.Wpf.Toolkit.Zoombox;
 
 namespace DMXController
 {
@@ -178,8 +179,11 @@ namespace DMXController
                 panel.Children.Add(disable);
                 animPanel.Children.Add(panel);
             }
-            port.PortName = "COM7"; // currently hardcoded, make way to change this
-            port.BaudRate = 115200;
+
+            foreach (string e in SerialPort.GetPortNames())
+            {
+                portBox.Items.Add(e);
+            }
             
             
             dispatcherTimerr.Tick += new EventHandler(dataSender);
@@ -325,16 +329,19 @@ namespace DMXController
         {
             if (!port.IsOpen)
             {
-                try
+                if (portSelected)
                 {
-                    port.Open();
-                    port.DiscardOutBuffer();
-                    port.DiscardInBuffer();
-                    Thread.Sleep(100);
-                } 
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message + "\n Stacktrace: \n\n" + ex.StackTrace);
+                    try
+                    {
+                        port.Open();
+                        port.DiscardOutBuffer();
+                        port.DiscardInBuffer();
+                        Thread.Sleep(100);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message + "\n Stacktrace: \n\n" + ex.StackTrace);
+                    }
                 }
             }
             else
@@ -445,6 +452,19 @@ namespace DMXController
                 blackout = true;
                 ((Button)sender).Background = Brushes.Red;
             }
+        }
+
+        bool portSelected = false;
+        private void portBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (port.IsOpen)
+            {
+                port.Close();
+            }
+            portSelected = true;
+            port.PortName = ((ComboBox)sender).SelectedItem.ToString();
+            port.BaudRate = 115200;
+            port.Open();
         }
     }
 }

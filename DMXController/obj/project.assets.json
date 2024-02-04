@@ -60,10 +60,14 @@
       "Microsoft.Xaml.Behaviors.Wpf/1.1.31": {
         "type": "package",
         "compile": {
-          "lib/net5.0-windows7.0/Microsoft.Xaml.Behaviors.dll": {}
+          "lib/net5.0-windows7.0/Microsoft.Xaml.Behaviors.dll": {
+            "related": ".pdb;.xml"
+          }
         },
         "runtime": {
-          "lib/net5.0-windows7.0/Microsoft.Xaml.Behaviors.dll": {}
+          "lib/net5.0-windows7.0/Microsoft.Xaml.Behaviors.dll": {
+            "related": ".pdb;.xml"
+          }
         },
         "frameworkReferences": [
           "Microsoft.WindowsDesktop.App.WPF"
@@ -145,10 +149,14 @@
           "runtime.native.System.IO.Ports": "6.0.0"
         },
         "compile": {
-          "lib/net6.0/System.IO.Ports.dll": {}
+          "lib/net6.0/System.IO.Ports.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net6.0/System.IO.Ports.dll": {}
+          "lib/net6.0/System.IO.Ports.dll": {
+            "related": ".xml"
+          }
         },
         "build": {
           "buildTransitive/netcoreapp3.1/_._": {}
@@ -395,31 +403,35 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\sgjes\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\karlj\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
+    "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Users\\sgjes\\Documents\\Visual studioo\\ArduinoDMX-Software\\DMXController\\DMXController.csproj",
+      "projectUniqueName": "C:\\Users\\karlj\\source\\repos\\ArduinoDMX-Software\\DMXController\\DMXController.csproj",
       "projectName": "DMXController",
-      "projectPath": "D:\\Users\\sgjes\\Documents\\Visual studioo\\ArduinoDMX-Software\\DMXController\\DMXController.csproj",
-      "packagesPath": "C:\\Users\\sgjes\\.nuget\\packages\\",
-      "outputPath": "D:\\Users\\sgjes\\Documents\\Visual studioo\\ArduinoDMX-Software\\DMXController\\obj\\",
+      "projectPath": "C:\\Users\\karlj\\source\\repos\\ArduinoDMX-Software\\DMXController\\DMXController.csproj",
+      "packagesPath": "C:\\Users\\karlj\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\karlj\\source\\repos\\ArduinoDMX-Software\\DMXController\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+        "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
       ],
       "configFilePaths": [
-        "C:\\Users\\sgjes\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\karlj\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
       "originalTargetFrameworks": [
-        "net6.0-windows7.0"
+        "net6.0-windows"
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -457,7 +469,8 @@
           "net47",
           "net471",
           "net472",
-          "net48"
+          "net48",
+          "net481"
         ],
         "assetTargetFallback": true,
         "warn": true,
@@ -469,7 +482,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.123\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.201\\RuntimeIdentifierGraph.json"
       }
     }
   }

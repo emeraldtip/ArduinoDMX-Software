@@ -84,6 +84,8 @@
         <Label Content="Chanelles:" Height="106" Width="597" Foreground="White" FontFamily="Segoe UI" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Top="672"/>
         <Label Content="Animations:" Height="64" Width="177" Foreground="White" FontFamily="Segoe UI" FontSize="32" Canvas.Top="156" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.Left="537"/>
         <Label Content="Selected fixtures properties:" Height="106" Width="597" Foreground="White" FontFamily="Segoe UI" FontSize="32" Canvas.Top="156" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.Left="924"/>
+        <ComboBox x:Name="portBox" Width="192" HorizontalAlignment="Left" Canvas.Left="678" VerticalAlignment="Top" Height="53" Canvas.Top="70" SelectionChanged="portBox_SelectionChanged" FontSize="32"/>
+        <Label Content="COM port:" Height="50" Width="649" Foreground="White" FontFamily="Segoe UI" FontSize="32" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.Left="678" Canvas.Top="12"/>
     </Canvas>
 
 
